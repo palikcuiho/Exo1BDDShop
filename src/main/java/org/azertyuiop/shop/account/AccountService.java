@@ -35,9 +35,20 @@ public class AccountService {
         return a.isPresent();
     }
 
+    public boolean dataIsValid(Account account){
+        return !this.doesUserExist(account.getUsername());
+    }
+
     public void registerAccount(Account account) {
-        if (!this.doesUserExist(account.getUsername()))
+        if (dataIsValid(account))
+        {
             accountRepository.save(account);
+            successfullyRegisteredMessage(account.getUsername());
+            }
         else throw new UserAlreadyExistsException(account.getUsername());
+    }
+
+    public void successfullyRegisteredMessage(String username){
+        System.out.println("User " + username + " successfully registered");
     }
 }
